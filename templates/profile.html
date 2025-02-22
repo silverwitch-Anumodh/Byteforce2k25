@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+</head>
+<body>
+    <h1>Profile</h1>
+    {% if current_user.is_authenticated %}
+        <p>Welcome, <strong>{{ current_user.username }}</strong>!</p>
+        <p>Here’s your profile information:</p>
+        <ul>
+            <li><strong>Username:</strong> {{ current_user.username }}</li>
+            <!-- Add more user details here if needed -->
+        </ul>
+        <a href="{{ url_for('home') }}">Back to Home</a>
+        <br>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+        <p>You are not logged in. Please <a href="{{ url_for('login') }}">login</a> to access your profile.</p>
+    {% endif %}
+</body>
+</html>

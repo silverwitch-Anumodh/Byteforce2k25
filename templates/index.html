@@ -5,9 +5,15 @@
 </head>
 <body>
     <h1>Fake News Detector</h1>
-    <form method="POST">
-        <textarea name="news_text" rows="5" cols="40" placeholder="Paste news article here..."></textarea><br>
-        <input type="submit" value="Check">
-    </form>
+    {% if current_user.is_authenticated %}
+        <p>Welcome, {{ current_user.username }}!</p>
+        <form method="POST">
+            <textarea name="news_text" rows="5" cols="40" placeholder="Paste news article here..."></textarea><br>
+            <input type="submit" value="Check">
+        </form>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    {% else %}
+        <p>Please <a href="{{ url_for('login') }}">login</a> or <a href="{{ url_for('register') }}">register</a> to use the fake news detector.</p>
+    {% endif %}
 </body>
 </html>
