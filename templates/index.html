@@ -1,21 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fact-Checking Website</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fact Checker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <h1>Welcome to the Fact-Checking Website</h1>
-    <form method="POST" action="/">
-        <label for="claim">Enter a claim to verify:</label><br>
-        <input type="text" id="claim" name="claim" required><br><br>
-        <button type="submit">Verify</button>
-    </form>
-    {% if current_user.is_authenticated %}
-        <p><a href="{{ url_for('logout') }}">Logout</a></p>
-    {% else %}
-        <p><a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Register</a></p>
+  <div class="container">
+    <h1>Fact Checker</h1>
+
+    <!-- Search Bar -->
+    <input type="text" id="searchInput" placeholder="Enter a news or claim...">
+    <button id="searchButton">Search</button>
+
+    <!-- Search Results -->
+    <div id="results"></div>
+
+    <!-- User Authentication Links -->
+    <div class="auth-links">
+      {% if logged_in %}
+        <a href="/history">Search History</a> |
+        <a href="/logout">Logout</a>
+      {% else %}
+        <a href="/login">Login</a> |
+        <a href="/register">Register</a>
+      {% endif %}
+    </div>
+
+    <!-- Messages for Non-Logged-In Users -->
+    {% if not logged_in %}
+      <p class="message">You have 5 free searches. <a href="/login">Log in</a> for unlimited searches.</p>
     {% endif %}
+  </div>
+
+  <!-- JavaScript for Search Functionality -->
+  <script>
+    document.getElementById('searchButton').addEventListener('click', function () {
+      const query = document.getElementById('searchInput').value;
+      if (query) {
+        fetch(`/search?query=${encodeURIComponent(query)}`)
+          .then(response => response.json())
+          .then(data => {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            if (data.error) {
+              resultsDiv.innerHTML = `<p class="error">${data.error}</p>`;
+              return;
+            }
+
+            if (data.articles && data.articles.length > 0) {
+              data.articles.forEach(article => {
+                const articleDiv = document.createElement('div');
+                articleDiv.className = 'article';
+                articleDiv.innerHTML = `
+                  <h3>${article.title}</h3>
+                  <p>${article.snippet}</p>
+                  <p><a href="${article.link}" target="_blank">Read more</a></p>
+                `;
+                resultsDiv.appendChild(articleDiv);
+              });
+            } else {
+              resultsDiv.innerHTML = `<p class="no-results">No results found.</p>`;
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            resultsDiv.innerHTML = `<p class="error">An error occurred. Please try again.</p>`;
+          });
+      }
+    });
+
+    // Log out immediately when the user leaves the website
+    window.addEventListener('beforeunload', function () {
+      fetch('/logout', { method: 'POST', keepalive: true });
+    });
+  </script>
 </body>
 </html>

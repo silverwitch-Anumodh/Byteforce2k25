@@ -6,13 +6,8 @@
 <body>
     <h1>Result</h1>
     <p>The claim is: <strong>{{ prediction }}</strong></p>
-    {% if articles %}
-        <h2>Related Articles:</h2>
-        <ul>
-            {% for title, url in articles %}
-                <li><a href="{{ url }}" target="_blank">{{ title }}</a></li>
-            {% endfor %}
-        </ul>
+    {% if evidence %}
+        <p>Here’s evidence to support this result: <a href="{{ evidence[1] }}" target="_blank">{{ evidence[0] }}</a></p>
     {% endif %}
     <a href="{{ url_for('home') }}">Check another claim</a>
 </body>

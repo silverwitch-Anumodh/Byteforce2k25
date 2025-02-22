@@ -3,7 +3,7 @@ import requests
 
 # Google Fact Check Tools API endpoint
 API_URL = "https://factchecktools.googleapis.com/v1alpha1/claims:search"
-API_KEY = "AIzaSyDxMcAbYq3WkrdOKT6mnl6KwRVlq0FQIaY"  
+API_KEY = "AIzaSyDxMcAbYq3WkrdOKT6mnl6KwRVlq0FQIaY"  # Replace with your Google API key
 
 # Function to fetch fact-checked claims
 def fetch_fact_checks(query, max_results=10):
