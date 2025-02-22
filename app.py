@@ -6,6 +6,7 @@ import requests
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import PassiveAggressiveClassifier
 import pandas as pd
+from sklearn.utils import resample  # <-- Add this import
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Change this to a random secret key
@@ -76,21 +77,30 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-# ====== ADD THE PROFILE ROUTE HERE ======
 # Profile route
 @app.route('/profile')
 @login_required  # Only logged-in users can access this route
 def profile():
     return render_template('profile.html', user=current_user)
-# =======================================
 
 # Fake News Detection Code
 # Load fake news dataset
 df = pd.read_csv('fake_news_dataset.csv')  # Replace with your dataset path
-X = df['text']
-y = df['label']
 
-# Train a simple fake news detection model
+# ====== FIXED CODE TO BALANCE THE DATASET ======
+# Separate FAKE and REAL news
+fake_df = df[df['label'] == 'FAKE']
+real_df = df[df['label'] == 'REAL']
+
+# Make both FAKE and REAL news equal in number (with replacement)
+balanced_df = pd.concat([fake_df, real_df.sample(len(fake_df), replace=True)])
+
+# Use the balanced dataset
+X = balanced_df['text']
+y = balanced_df['label']
+# ===============================================
+
+# Train the model
 tfidf = TfidfVectorizer(stop_words='english', max_df=0.7)
 X_tfidf = tfidf.fit_transform(X)
 model = PassiveAggressiveClassifier(max_iter=50)
@@ -101,6 +111,16 @@ def predict_news(text):
     text_tfidf = tfidf.transform([text])
     prediction = model.predict(text_tfidf)
     return prediction[0]
+
+# ====== TEST THE MODEL ======
+# Test with a REAL news example
+real_news = "Scientists discovered a new species of butterfly."
+print(predict_news(real_news))  # Should say "REAL"
+
+# Test with a FAKE news example
+fake_news = "Aliens landed in New York City."
+print(predict_news(fake_news))  # Should say "FAKE"
+# ============================
 
 # Function to fetch real news from NewsAPI
 def get_real_news(query):
