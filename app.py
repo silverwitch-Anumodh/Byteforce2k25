@@ -39,8 +39,8 @@ init_db()
 
 # Fetch real articles from Google
 def fetch_google_articles(query):
-    api_key = 'YOUR_GOOGLE_API_KEY'  # Replace with your Google API key
-    cx = 'YOUR_CUSTOM_SEARCH_ENGINE_ID'  # Replace with your Custom Search Engine ID
+    api_key = 'AIzaSyDxMcAbYq3WkrdOKT6mnl6KwRVlq0FQIaY'  # Replace with your Google API key
+    cx = 'e45d94a7a7ec0486a'  # Replace with your Custom Search Engine ID
     url = f'https://www.googleapis.com/customsearch/v1?q={query}&key={api_key}&cx={cx}'
     response = requests.get(url)
     if response.status_code == 200:
@@ -138,4 +138,4 @@ def history():
     return render_template('history.html', searches=searches)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
