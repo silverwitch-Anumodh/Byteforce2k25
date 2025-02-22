@@ -1,0 +1,31 @@
+import pandas as pd
+
+# Define new data
+new_data = [
+    ["Fake Headline 3", "Scientists discover a secret planet hidden behind the Moon.", "FAKE"],
+    ["Real Headline 3", "NASA announces the successful landing of a new Mars rover.", "REAL"],
+    ["Fake Headline 4", "Government to ban all mobile phones starting next month.", "FAKE"],
+    ["Real Headline 4", "Government introduces new policies to regulate social media.", "REAL"],
+    ["Fake Headline 5", "Drinking coffee will make you live 50 years longer.", "FAKE"],
+    ["Real Headline 5", "New study shows the benefits of moderate coffee consumption.", "REAL"],
+    ["Fake Headline 6", "Aliens found working at a secret underground base in Antarctica.", "FAKE"],
+    ["Real Headline 6", "Scientists find new species of bacteria in Antarctica.", "REAL"],
+    ["Fake Headline 7", "Breaking: Time travel machine discovered in an abandoned lab.", "FAKE"],
+    ["Real Headline 7", "Physicists explore new theories of quantum mechanics.", "REAL"]
+]
+
+# Load existing CSV
+df = pd.read_csv("news.csv")
+
+# Convert new data to DataFrame
+new_df = pd.DataFrame(new_data, columns=["title", "text", "label"])
+
+# Append new data to the original DataFrame
+df = pd.concat([df, new_df], ignore_index=True)
+
+# Save back to CSV
+df.to_csv("news.csv", index=False)
+
+# Verify the update
+print(df.shape)  # Check the new number of rows
+print(df['label'].value_counts())  # Check updated FAKE & REAL counts

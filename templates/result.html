@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Result</title>
+</head>
+<body>
+    <h1>Result</h1>
+    <p>The news is: <strong>{{ prediction }}</strong></p>
+    {% if real_news_title %}
+    <p>Here's a real news article: <a href="{{ real_news_url }}" target="_blank">{{ real_news_title }}</a></p>
+    {% endif %}
+    <a href="/">Check another news</a>
+</body>
+</html>
