@@ -1,19 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Fake News Detector</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fact-Checking Website</title>
 </head>
 <body>
-    <h1>Fake News Detector</h1>
+    <h1>Welcome to the Fact-Checking Website</h1>
+    <form method="POST" action="/">
+        <label for="claim">Enter a claim to verify:</label><br>
+        <input type="text" id="claim" name="claim" required><br><br>
+        <button type="submit">Verify</button>
+    </form>
     {% if current_user.is_authenticated %}
-        <p>Welcome, {{ current_user.username }}!</p>
-        <form method="POST">
-            <textarea name="news_text" rows="5" cols="40" placeholder="Paste news article here..."></textarea><br>
-            <input type="submit" value="Check">
-        </form>
-        <a href="{{ url_for('logout') }}">Logout</a>
+        <p><a href="{{ url_for('logout') }}">Logout</a></p>
     {% else %}
-        <p>Please <a href="{{ url_for('login') }}">login</a> or <a href="{{ url_for('register') }}">register</a> to use the fake news detector.</p>
+        <p><a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Register</a></p>
     {% endif %}
 </body>
 </html>

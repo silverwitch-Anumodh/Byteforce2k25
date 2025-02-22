@@ -5,10 +5,15 @@
 </head>
 <body>
     <h1>Result</h1>
-    <p>The news is: <strong>{{ prediction }}</strong></p>
-    {% if real_news_title %}
-    <p>Here's a real news article: <a href="{{ real_news_url }}" target="_blank">{{ real_news_title }}</a></p>
+    <p>The claim is: <strong>{{ prediction }}</strong></p>
+    {% if articles %}
+        <h2>Related Articles:</h2>
+        <ul>
+            {% for title, url in articles %}
+                <li><a href="{{ url }}" target="_blank">{{ title }}</a></li>
+            {% endfor %}
+        </ul>
     {% endif %}
-    <a href="/">Check another news</a>
+    <a href="{{ url_for('home') }}">Check another claim</a>
 </body>
 </html>
